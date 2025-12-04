@@ -1,292 +1,289 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
 #root {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  padding: 30px;
-  max-width: 1100px;
-  width: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 30px;
+    max-width: 1100px;
+    width: 100%;
 }
 
 h1 {
-  text-align: center;
-  color: #667eea;
-  margin-bottom: 10px;
-  font-size: 2.5em;
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 2.5em;
 }
 
 .subtitle {
-  text-align: center;
-  color: #666;
-  margin-bottom: 30px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
 }
 
 .controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .timer {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #667eea;
-  background: #f0f4ff;
-  padding: 10px 20px;
-  border-radius: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #667eea;
+    background: #f0f4ff;
+    padding: 10px 20px;
+    border-radius: 10px;
 }
 
 .buttons {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 button {
-  padding: 12px 24px;
-  font-size: 1em;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
+    padding: 12px 24px;
+    font-size: 1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
 }
 
 .btn-primary {
-  background: #667eea;
-  color: white;
+    background: #667eea;
+    color: white;
 }
 
 .btn-primary:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102,126,234,0.4);
 }
 
 .btn-success {
-  background: #48bb78;
-  color: white;
+    background: #48bb78;
+    color: white;
 }
 
 .btn-success:hover {
-  background: #38a169;
+    background: #38a169;
 }
 
 .btn-warning {
-  background: #f6ad55;
-  color: white;
+    background: #f6ad55;
+    color: white;
 }
 
 .btn-warning:hover {
-  background: #ed8936;
+    background: #ed8936;
 }
 
 button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .game-area {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
 }
 
 .board-container {
-  background: #f7fafc;
-  padding: 20px;
-  border-radius: 15px;
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .board {
-  display: grid;
-  gap: 3px;
-  justify-content: center;
-  user-select: none;
+    display: grid;
+    gap: 3px;
+    justify-content: center;
+    user-select: none;
 }
 
 .cell {
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 16px;
-  color: #2d3748;
-  cursor: pointer;
-  transition: all 0.2s;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .cell:hover {
-  background: #edf2f7;
-  transform: scale(1.05);
+    background: #edf2f7;
+    transform: scale(1.05);
 }
 
 .cell.selecting {
-  background: #90cdf4;
-  border-color: #4299e1;
-  color: #1a365d;
+    background: #90cdf4;
+    border-color: #4299e1;
 }
 
 .cell.found {
-  background: #48bb78;
-  color: white;
-  border-color: #38a169;
-  animation: foundPulse 0.5s;
+    background: #48bb78;
+    color: white;
+    border-color: #38a169;
+    animation: foundPulse 0.5s;
 }
 
 .cell.solution {
-  background: #f6ad55;
-  color: white;
-  border-color: #ed8936;
+    background: #f6ad55;
+    color: white;
+    border-color: #ed8936;
 }
 
 @keyframes foundPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
 }
 
 .words-panel {
-  background: #f7fafc;
-  padding: 20px;
-  border-radius: 15px;
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .words-panel h3 {
-  color: #667eea;
-  margin-bottom: 15px;
-  font-size: 1.3em;
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.3em;
 }
 
 .word-list {
-  list-style: none;
+    list-style: none;
 }
 
 .word-item {
-  padding: 10px;
-  margin-bottom: 8px;
-  background: white;
-  border-radius: 8px;
-  border-left: 4px solid #cbd5e0;
-  transition: all 0.3s;
-  cursor: default;
-  color: #2d3748;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #cbd5e0;
+    transition: all 0.3s;
+    cursor: default;
 }
 
 .word-item.found {
-  background: #c6f6d5;
-  border-left-color: #48bb78;
-  text-decoration: line-through;
-  opacity: 0.7;
+    background: #c6f6d5;
+    border-left-color: #48bb78;
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
 .status {
-  text-align: center;
-  padding: 15px;
-  background: #edf2f7;
-  border-radius: 10px;
-  margin-top: 20px;
-  font-size: 1.1em;
-  color: #2d3748;
+    text-align: center;
+    padding: 15px;
+    background: #edf2f7;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 1.1em;
 }
 
 .status.error {
-  background: #fed7d7;
-  color: #c53030;
+    background: #fed7d7;
+    color: #c53030;
 }
 
 .status.success {
-  background: #c6f6d5;
-  color: #22543d;
+    background: #c6f6d5;
+    color: #22543d;
 }
 
 .status.info {
-  background: #bee3f8;
-  color: #2c5282;
+    background: #bee3f8;
+    color: #2c5282;
 }
 
 .progress {
-  margin-top: 15px;
-  background: #e2e8f0;
-  border-radius: 10px;
-  height: 25px;
-  overflow: hidden;
+    margin-top: 15px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 25px;
+    overflow: hidden;
 }
 
 .progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  transition: width 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 0.9em;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
 .instructions {
-  background: #e6fffa;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-  border-left: 4px solid #48bb78;
+    background: #e6fffa;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border-left: 4px solid #48bb78;
 }
 
 .instructions h4 {
-  color: #22543d;
-  margin-bottom: 8px;
+    color: #22543d;
+    margin-bottom: 8px;
 }
 
 .instructions ul {
-  margin-left: 20px;
-  color: #2d3748;
-}
-
-.instructions li {
-  color: #2d3748;
+    margin-left: 20px;
+    color: #2d3748;
 }
 
 @media (max-width: 768px) {
-  .game-area {
-    grid-template-columns: 1fr;
-  }
-  
-  .cell {
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
-  }
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+    
+    .cell {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
 }
 
 .loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 1.2em;
-  color: #667eea;
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2em;
+    color: #667eea;
 }
-
