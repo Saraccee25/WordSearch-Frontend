@@ -9,6 +9,7 @@ function App() {
   const [tiempo, setTiempo] = useState('00:00');
   const [palabrasEncontradas, setPalabrasEncontradas] = useState([]);
   const [posicionesEncontradas, setPosicionesEncontradas] = useState([]);
+  const [reconociendo, setReconociendo] = useState(false);
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '', visible: false });
   
   const [seleccionando, setSeleccionando] = useState(false);
@@ -121,17 +122,17 @@ function App() {
       console.log('Soluciones completas:', JSON.stringify(datos.soluciones, null, 2));
       console.log('='.repeat(60));
       
-     
+      
       setJuegoDatos(prev => ({
         ...prev,
         soluciones: datos.soluciones
       }));
       
-      
+   
       const todasLasPalabras = datos.soluciones.map(sol => sol.palabra);
       setPalabrasEncontradas(todasLasPalabras);
       
-     
+  
       const todasLasPosiciones = datos.soluciones.flatMap(sol => 
         sol.posiciones.map(pos => ({ fila: pos[0], col: pos[1] }))
       );
@@ -205,7 +206,7 @@ function App() {
     
     if (juegoDatos.palabras.includes(palabraSeleccionada)) {
       if (!palabrasEncontradas.includes(palabraSeleccionada)) {
-        
+       
         const nuevasPosiciones = [...posicionesEncontradas, ...celdasSeleccionadas];
         setPosicionesEncontradas(nuevasPosiciones);
         
@@ -236,6 +237,115 @@ function App() {
     enviarComando('RESOLVER');
   };
 
+  const buscarPalabraEnTablero = (palabra) => {
+    if (!juegoDatos?.tablero) return null;
+    
+    const size = juegoDatos.tablero.length;
+    const direcciones = [
+      { dr: 0, dc: 1 },   
+      { dr: 0, dc: -1 },  
+      { dr: 1, dc: 0 },   
+      { dr: -1, dc: 0 }, 
+      { dr: 1, dc: 1 },   
+      { dr: 1, dc: -1 },  
+      { dr: -1, dc: 1 },  
+      { dr: -1, dc: -1 }  
+    ];
+
+    for (let fila = 0; fila < size; fila++) {
+      for (let col = 0; col < size; col++) {
+        for (const { dr, dc } of direcciones) {
+          const posiciones = [];
+          let encontrada = true;
+
+          for (let i = 0; i < palabra.length; i++) {
+            const nuevaFila = fila + dr * i;
+            const nuevaCol = col + dc * i;
+
+            if (
+              nuevaFila < 0 || nuevaFila >= size ||
+              nuevaCol < 0 || nuevaCol >= size ||
+              juegoDatos.tablero[nuevaFila][nuevaCol] !== palabra[i]
+            ) {
+              encontrada = false;
+              break;
+            }
+
+            posiciones.push({ fila: nuevaFila, col: nuevaCol });
+          }
+
+          if (encontrada) {
+            return posiciones;
+          }
+        }
+      }
+    }
+
+    return null;
+  };
+
+  const iniciarReconocimientoVoz = () => {
+    if (!juegoActivo) {
+      mostrarEstado('Debes iniciar un juego primero', 'error');
+      return;
+    }
+
+    if (!('webkitSpeechRecognition' in window)) {
+      mostrarEstado('Tu navegador no soporta reconocimiento de voz', 'error');
+      return;
+    }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      setReconociendo(true);
+      mostrarEstado('🎤 Escuchando...', 'info');
+    };
+
+    recognition.onerror = (event) => {
+      setReconociendo(false);
+      console.error('Error de reconocimiento:', event.error);
+      mostrarEstado('Error al reconocer la voz', 'error');
+    };
+
+    recognition.onend = () => {
+      setReconociendo(false);
+    };
+
+    recognition.onresult = (event) => {
+      const palabraReconocida = event.results[0][0].transcript.trim().toUpperCase();
+      console.log('Palabra reconocida:', palabraReconocida);
+
+      if (juegoDatos?.palabras.includes(palabraReconocida)) {
+        if (palabrasEncontradas.includes(palabraReconocida)) {
+          mostrarEstado(`Ya encontraste "${palabraReconocida}"`, 'info');
+        } else {
+        
+          const posiciones = buscarPalabraEnTablero(palabraReconocida);
+          
+          if (posiciones) {
+          
+            setPosicionesEncontradas(prev => [...prev, ...posiciones]);
+            
+           
+            enviarComando('ENCONTRAR', { palabra: palabraReconocida });
+            
+            mostrarEstado(`¡Encontraste por voz: ${palabraReconocida}!`, 'success');
+          } else {
+            mostrarEstado(`No se pudo localizar "${palabraReconocida}"`, 'error');
+          }
+        }
+      } else {
+        mostrarEstado(`"${palabraReconocida}" no está en la lista`, 'error');
+      }
+    };
+
+    recognition.start();
+  };
+
   const mostrarEstado = (texto, tipo = '') => {
     setMensaje({ texto, tipo, visible: true });
     setTimeout(() => {
@@ -246,7 +356,6 @@ function App() {
   const getCeldaClase = (fila, col) => {
     let clases = 'cell';
     
-
     const yaEncontrada = posicionesEncontradas.some(
       pos => pos.fila === fila && pos.col === col
     );
@@ -267,7 +376,7 @@ function App() {
       }
     }
     
-  
+    
     if (celdasSeleccionadas.some(c => c.fila === fila && c.col === col)) {
       clases += ' selecting';
     }
@@ -290,6 +399,14 @@ function App() {
         <div className="buttons">
           <button className="btn-primary" onClick={iniciarJuego}>
             Nuevo Juego
+          </button>
+          <button 
+            className={reconociendo ? "btn-success" : "btn-primary"}
+            onClick={iniciarReconocimientoVoz}
+            disabled={!juegoActivo}
+            title="Reconocimiento de voz"
+          >
+            {reconociendo ? '🎤 Escuchando...' : '🎤 Decir Palabra'}
           </button>
           <button 
             className="btn-warning" 
@@ -365,14 +482,15 @@ function App() {
         </div>
       </div>
 
-      <div className="instructions">
-        <h4>📖 Instrucciones:</h4>
-        <ul>
-          <li><strong>Seleccionar palabra:</strong> Haz clic en la primera letra y arrastra hasta la última</li>
-          <li><strong>Direcciones válidas:</strong> Horizontal, vertical y diagonales</li>
-          <li><strong>Ver solución:</strong> Click en "Ver Solución" para resolver automáticamente</li>
-        </ul>
-      </div>
+        <div className="instructions">
+          <h4>📖 Instrucciones:</h4>
+          <ul>
+            <li><strong>Seleccionar palabra:</strong> Haz clic en la primera letra y arrastra hasta la última</li>
+            <li><strong>Reconocimiento de voz:</strong> Haz clic en "🎤 Decir Palabra" y di la palabra en voz alta</li>
+            <li><strong>Direcciones válidas:</strong> Horizontal, vertical y diagonales</li>
+            <li><strong>Ver solución:</strong> Click en "Ver Solución" para resolver automáticamente</li>
+          </ul>
+        </div>
     </div>
   );
 }
